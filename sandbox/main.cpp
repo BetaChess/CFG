@@ -7,15 +7,16 @@ int main()
 {
 	setlocale(LC_ALL, "");
 
-	std::u32string test;
-	test.resize(4);
-	test[0] = 0x000003B5;
-	test[1] = 'b';
-	test[2] = 'a';
-	test[3] = 'c';
+	cfg::GrammarUTF8 grammar = cfg::GrammarBuilder(
+		U"<A> -> ε <Q> | s | ε\n"
+		"<B> -> h <A>gklllll | e | gglll <C>\n"
+		"<C> -> ε | <B> | <A>"
+	).build();
 	
-	for (wchar_t c : test)
+	auto test = grammar.grammar_to_stringlike<std::u32string>();
+
+	for (wchar_t c: test)
 		std::wcout << c;
-	
+
 	return 0;
 }
